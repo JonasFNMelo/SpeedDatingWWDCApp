@@ -14,9 +14,6 @@ struct ContentView: View {
         NavigationStack {
             VStack(spacing: 32) {
                 VStack(spacing: 8) {
-                    Image(systemName: "applelogo")
-                        .font(.system(size: 56))
-                        .foregroundStyle(.primary)
                     Text("Speed Dating WWDC")
                         .font(.largeTitle.bold())
                     Text("Quebra-gelo entre alunos e alumni")
