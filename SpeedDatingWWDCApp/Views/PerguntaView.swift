@@ -12,18 +12,34 @@ struct PerguntaView: View {
     @State private var pergunta: String = ""
     @State private var animacao: Bool = false
 
-    private var alvo: String {
-        categoria == .aluno ? "alumni" : "aluno"
-    }
+    @State var alvo: String
+    
+    init(categoria: Categoria){
+        self.categoria = categoria
+        _alvo = State(initialValue: categoria == .aluno ? Categoria.alumni.rawValue : Categoria.aluno.rawValue)
 
+    }
+    
     var body: some View {
         VStack(spacing: 24) {
             VStack(spacing: 4) {
                 Text("Você é \(categoria.rawValue)")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                Text("Pergunte para um \(alvo):")
-                    .font(.headline)
+                    .bold()
+                HStack{
+                    Text("Selecione para quem é a pergunta: ")
+                        .fontWeight(.light)
+                    Spacer()
+                    Picker("A", selection: $alvo) {
+                        ForEach(Categoria.allCases, id: \.self) { cat in
+                            Text(cat.rawValue).tag(cat.rawValue)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .tint(categoria.gradiente[0])
+                    .onChange(of: alvo) {
+                        print(alvo)
+                    }
+                }
             }
             .padding(.top, 16)
 
@@ -33,9 +49,7 @@ struct PerguntaView: View {
                 RoundedRectangle(cornerRadius: 24)
                     .fill(
                         LinearGradient(
-                            colors: categoria == .aluno
-                                ? [.blue.opacity(0.15), .purple.opacity(0.15)]
-                                : [.orange.opacity(0.15), .pink.opacity(0.15)],
+                            colors: categoria.lightGradiente,
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )
@@ -73,15 +87,13 @@ struct PerguntaView: View {
                 sortear()
             } label: {
                 Label(pergunta.isEmpty ? "Gerar pergunta" : "Próxima pergunta",
-                      systemImage: "sparkles")
+                      systemImage: "")
                     .font(.headline)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
                     .background(
                         LinearGradient(
-                            colors: categoria == .aluno
-                                ? [.blue, .purple]
-                                : [.orange, .pink],
+                            colors: categoria.gradiente,
                             startPoint: .leading,
                             endPoint: .trailing
                         )
@@ -99,7 +111,7 @@ struct PerguntaView: View {
     private func sortear() {
         animacao = false
         let nova = BancoDePerguntas.perguntaAleatoria(
-            para: categoria,
+            para: Categoria(rawValue: alvo) ?? .cocoahead,
             evitando: pergunta.isEmpty ? nil : pergunta
         )
         withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {

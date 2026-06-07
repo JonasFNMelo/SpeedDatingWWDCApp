@@ -15,3 +15,7 @@ struct SpeedDatingWWDCApp: App {
         }
     }
 }
+
+#Preview {
+    ContentView()
+}
