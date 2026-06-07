@@ -41,10 +41,8 @@ struct ContentView: View {
                         .buttonStyle(.plain)
                     }
                 }
-
-                Spacer()
             }
-            .padding(.horizontal, 24)
+            .padding()
             .navigationDestination(item: $categoriaSelecionada) { categoria in
                 PerguntaView(categoria: categoria)
             }

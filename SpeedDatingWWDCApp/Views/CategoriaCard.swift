@@ -12,20 +12,26 @@ struct CategoriaCard: View {
 
     var body: some View {
         HStack(spacing: 16) {
-            Image(systemName: categoria.icone)
-                .font(.title2)
-                .foregroundStyle(.white)
-                .frame(width: 48, height: 48)
-                .background(
-                    LinearGradient(
-                        colors: categoria == .aluno
-                            ? [.blue, .purple]
-                            : [.orange, .pink],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
+            if categoria != .cocoahead{
+                Image(systemName: categoria.icone)
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .frame(width: 48, height: 48)
+                    .background(
+                        LinearGradient(
+                            colors: categoria.gradiente,
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
                     )
-                )
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
+            else {
+                Image("cocoaheadIcon")
+                    .resizable()
+                    .frame(width: 48, height: 48)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(categoria.rawValue)
@@ -46,6 +52,6 @@ struct CategoriaCard: View {
 }
 
 #Preview {
-    CategoriaCard(categoria: Categoria.alumni)
+    CategoriaCard(categoria: Categoria.cocoahead)
 }
 
